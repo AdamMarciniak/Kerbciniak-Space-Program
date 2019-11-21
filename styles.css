@@ -14,11 +14,18 @@ body {
 
 .allCharts {
     width: 45vw;
-    height: 100%;
+    height: 90vh;
     border: solid black 1px;
     display: flex;
-    align-content: stretch;
-    justify-content: stretch;
+    align-items: center;
+    justify-content: space-evenly;
     flex-direction: column;
 }
+
+.chartContainer{
+    margin-bottom: 10px;
+    height: 20vh;
+    width: 100%;
+}
+
 

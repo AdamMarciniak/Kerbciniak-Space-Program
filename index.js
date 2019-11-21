@@ -13,7 +13,7 @@ const convertRocketData = (() => {
     const rocketBias = Math.max.apply(Math, rocketData.slice(0,20));
     rocketData = rocketData.map((x) => -x + rocketBias);
     //const xData = [0];
-    const tiny = 1 / 50;
+    const tiny = 1 / 40;
     smoothRocketData[1] = tiny*rocketData[1] + (1.0-tiny)*0;
     for (let i=1; i <= rocketData.length; i += 1){
         smoothRocketData[i+1] = tiny*rocketData[i+1] + (1.0-tiny)*smoothRocketData[i];
@@ -45,10 +45,37 @@ const physicsRun = (() => {
 
     const forceChart = new Chart(forceCtx, {type: 'line',
      data: forceData,
-     options: { legend: {display: false},
+     options: { legend: {display: false}, responsive: true, maintainAspectRatio: false,
         title: {
             display: true,
             text: 'Engine Force [N]'
+        }
+    }});
+
+    const dragCanvas = document.querySelector('.dragCanvas');
+    const dragCtx = dragCanvas.getContext('2d');
+
+    const dragData = {
+        label: 'Rocket drag (N)',
+        labels: [0],
+        datasets: [
+            {
+                fillColor: "rgba(0,0,0,0.2)",
+                strokeColor: "rgba(0,0,0,1)",
+                pointStrokeColor: "#267361",
+                data: [0],
+                pointRadius: 0,
+                showXLabels: 10,
+            },
+        ]
+    };
+
+    const dragChart = new Chart(dragCtx, {type: 'line',
+     data: dragData,
+     options: { legend: {display: false}, responsive: true, maintainAspectRatio: false,
+        title: {
+            display: true,
+            text: 'Rocket Drag [N]'
         }
     }});
 
@@ -71,7 +98,7 @@ const physicsRun = (() => {
     };
 
     const positionChart = new Chart(positionCtx, {type: 'line', data: positionData,
-    options: { legend: {display: false},
+    options: { legend: {display: false},responsive: true,  maintainAspectRatio: false,
     title: {
         display: true,
         text: 'Position [m]'
@@ -97,7 +124,7 @@ const physicsRun = (() => {
     };
 
     const velocityChart = new Chart(velocityCtx, {type: 'line', data: velocityData,
-    options: { legend: {display: false},
+    options: { legend: {display: false},responsive: true,  maintainAspectRatio: false,
     title: {
         display: true,
         text: 'Velocity [m/s]'
@@ -152,7 +179,7 @@ const physicsRun = (() => {
             const timeDiff = Date.now() - startTime;
             const i = Math.round(timeDiff)
             var forceDirection = new BABYLON.Vector3(0, 1, 0);
-            var forceMagnitude = slicedRocketData[i];
+            var forceMagnitude = slicedRocketData[i] < 1 ? 0 : slicedRocketData[i] ;
             var contactLocalRefPoint = BABYLON.Vector3.Zero();
 
             var dragDirection = new BABYLON.Vector3(0, -1, 0);
@@ -171,6 +198,9 @@ const physicsRun = (() => {
                 forceData.labels.push(timeDiff / 1000);
                 forceData.datasets[0].data.push(forceMagnitude);
 
+                dragData.labels.push(timeDiff / 1000);
+                dragData.datasets[0].data.push(dragMagnitude);
+
                 positionData.labels.push(timeDiff / 1000);
                 positionData.datasets[0].data.push(cone.getAbsolutePosition().y);
 
@@ -180,6 +210,8 @@ const physicsRun = (() => {
                 forceChart.update();
                 positionChart.update();
                 velocityChart.update();
+                dragChart.update();
+
 
 
             };
