@@ -135,7 +135,7 @@ const physicsRun = (() => {
     var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
     const rocketData = convertRocketData();
-    const slicedRocketData = rocketData.slice(7600, rocketData.length);
+    const slicedRocketData = rocketData.slice(6000, rocketData.length);
 
     // Create the scene space
     var scene = new BABYLON.Scene(engine);
@@ -146,7 +146,7 @@ const physicsRun = (() => {
     var physicsPlugin = new BABYLON.CannonJSPlugin();
     scene.enablePhysics(gravityVector, physicsPlugin);
     // Add a camera to the scene and attach it to the canvas
-    var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,0,20), scene);
+    var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,3,10), scene);
     camera.attachControl(canvas, true);
 
     // Add lights to the scene
@@ -156,7 +156,7 @@ const physicsRun = (() => {
     // Add and manipulate meshes in the scene
     var cone = BABYLON.MeshBuilder.CreateCylinder("cone", {diameterTop: 0, height: 0.3, diameterBottom: 0.2, tessellation: 4}, scene);
     var ground = BABYLON.MeshBuilder.CreateGround("gd", {width: 100, height: 100, subdivisions: 5}, scene);
-    ground.position.y = -1;
+    ground.position.y = -0.1;
 
     cone.physicsImposter = new BABYLON.PhysicsImpostor(cone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 0.098 }, scene);
     ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.PlaneImpostor, { mass: 0 }, scene);
