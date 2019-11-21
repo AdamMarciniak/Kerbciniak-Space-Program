@@ -132,7 +132,10 @@ const physicsRun = (() => {
 }});
 
     var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
-    var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+    var engine = new BABYLON.Engine(canvas, true , {
+        deterministicLockstep: true,
+        lockstepMaxSteps: 4
+      }); // Generate the BABYLON 3D engine
 
     const rocketData = convertRocketData();
     const slicedRocketData = rocketData.slice(6000, rocketData.length);
@@ -143,9 +146,10 @@ const physicsRun = (() => {
  
     
     var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
-    var physicsPlugin = new BABYLON.CannonJSPlugin();
+    var physicsPlugin = new BABYLON.CannonJSPlugin(false);
     scene.enablePhysics(gravityVector, physicsPlugin);
-    // Add a camera to the scene and attach it to the canvas
+    physicsPlugin.setTimeStep(1/60);
+
     var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,3,10), scene);
     camera.attachControl(canvas, true);
 
