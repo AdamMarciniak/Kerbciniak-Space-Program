@@ -1,0 +1,21 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+#renderCanvas {
+    width: 50vw;
+    height: 70vh;
+    touch-action: none;
+}
+
+
+.allCharts {
+    width: 45vw;
+    height: 100vh;
+    border: solid black 1px;
+}
