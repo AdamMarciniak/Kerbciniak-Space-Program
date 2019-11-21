@@ -5,8 +5,6 @@ body {
 }
 
 
-
-
 #renderCanvas {
     width: 50vw;
     height: 70vh;
@@ -16,6 +14,11 @@ body {
 
 .allCharts {
     width: 45vw;
-    height: 100vh;
+    height: 100%;
     border: solid black 1px;
+    display: flex;
+    align-content: stretch;
+    justify-content: stretch;
+    flex-direction: column;
 }
+

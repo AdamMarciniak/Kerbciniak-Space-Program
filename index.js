@@ -3,6 +3,10 @@
 const CD = 0.0006;
 const rho = 1.204;
 
+
+
+
+
 const convertRocketData = (() => {
     let rocketData = rawEngineData;
     let smoothRocketData = [0];
@@ -20,6 +24,85 @@ const convertRocketData = (() => {
 
 
 const physicsRun = (() => {
+
+    const forceCanvas = document.querySelector('.forceCanvas');
+    const forceCtx = forceCanvas.getContext('2d');
+
+    const forceData = {
+        label: 'Rocket Force (N)',
+        labels: [0],
+        datasets: [
+            {
+                fillColor: "rgba(0,0,0,0.2)",
+                strokeColor: "rgba(0,0,0,1)",
+                pointStrokeColor: "#267361",
+                data: [0],
+                pointRadius: 0,
+                showXLabels: 10,
+            },
+        ]
+    };
+
+    const forceChart = new Chart(forceCtx, {type: 'line',
+     data: forceData,
+     options: { legend: {display: false},
+        title: {
+            display: true,
+            text: 'Engine Force [N]'
+        }
+    }});
+
+    const positionCanvas = document.querySelector('.positionCanvas');
+    const positionCtx = positionCanvas.getContext('2d');
+
+    const positionData = {
+        label: 'Height (m)',
+        labels: [0],
+        datasets: [
+            {
+                fillColor: "rgba(0,0,0,0.2)",
+                strokeColor: "rgba(0,0,0,1)",
+                pointStrokeColor: "#267361",
+                data: [0],
+                pointRadius: 0,
+                showXLabels: 10,
+            },
+        ]
+    };
+
+    const positionChart = new Chart(positionCtx, {type: 'line', data: positionData,
+    options: { legend: {display: false},
+    title: {
+        display: true,
+        text: 'Position [m]'
+    }
+}});
+
+    const velocityCanvas = document.querySelector('.velocityCanvas');
+    const velocityCtx = velocityCanvas.getContext('2d');
+
+    const velocityData = {
+        label: 'Vertical Velocity (m/s)',
+        labels: [0],
+        datasets: [
+            {
+                fillColor: "rgba(0,0,0,0.2)",
+                strokeColor: "rgba(0,0,0,1)",
+                pointStrokeColor: "#267361",
+                data: [0],
+                pointRadius: 0,
+                showXLabels: 10,
+            },
+        ]
+    };
+
+    const velocityChart = new Chart(velocityCtx, {type: 'line', data: velocityData,
+    options: { legend: {display: false},
+    title: {
+        display: true,
+        text: 'Velocity [m/s]'
+    }
+}});
 
     var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
     var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
@@ -49,24 +132,23 @@ const physicsRun = (() => {
     cone.physicsImposter = new BABYLON.PhysicsImpostor(cone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 0.098 }, scene);
     ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.PlaneImpostor, { mass: 0 }, scene);
 
+    var blueMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
+
+    blueMaterial.diffuseColor = new BABYLON.Color3(0, 0.1, 0.9);
+    blueMaterial.specularColor = new BABYLON.Color3(0.0, 0.2, 0.8);
+    blueMaterial.emissiveColor = new BABYLON.Color3(0, 0, 0);
+    blueMaterial.ambientColor = new BABYLON.Color3(0.0, 0.1, 0.9);
+
+    ground.material = blueMaterial;
 
 
-    // Register a render loop to repeatedly render the scene
-    let i = 0;
 
-    const data = {
-        // A labels array that can contain any sort of values
-        labels: [0],
-        // Our series array that contains series objects or in this case series data arrays
-        series: [
-          [0]
-        ]
-      };
+  
 
-    const positionChart = new Chartist.Line('.ct-chart', data);
-    
+    let count = 0;
     const startTime = Date.now();
     engine.runRenderLoop(function () { 
+            count += 1;
             const timeDiff = Date.now() - startTime;
             const i = Math.round(timeDiff)
             var forceDirection = new BABYLON.Vector3(0, 1, 0);
@@ -82,15 +164,25 @@ const physicsRun = (() => {
 
             console.log(`index = ${i}  Force = ${forceMagnitude} velocity = ${cone.physicsImposter.getLinearVelocity().y}  position = ${cone.getAbsolutePosition().y}`);
 
-            data.labels.push(i / 1000);
-            data.series[0].push(cone.getAbsolutePosition().y);
-            console.log(data);
-            positionChart.update();
-
-
-
+         
             scene.render();
           
+            if (timeDiff < 17 * 1000){
+                forceData.labels.push(timeDiff / 1000);
+                forceData.datasets[0].data.push(forceMagnitude);
+
+                positionData.labels.push(timeDiff / 1000);
+                positionData.datasets[0].data.push(cone.getAbsolutePosition().y);
+
+                velocityData.labels.push(timeDiff / 1000);
+                velocityData.datasets[0].data.push(cone.physicsImposter.getLinearVelocity().y);
+    
+                forceChart.update();
+                positionChart.update();
+                velocityChart.update();
+
+
+            };
 
 
 

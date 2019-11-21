@@ -4,7 +4,7 @@
 
         <link rel="stylesheet" href="chartist.css">
         <link rel="stylesheet" type="text/css" href="styles.css">
-        <script src="chartist.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
         <script src="https://cdn.babylonjs.com/cannon.js"></script>
         <script src="https://cdn.babylonjs.com/babylon.js"></script>        
         <script src="engineData.js"></script>
@@ -15,14 +15,18 @@
 
 <body>
 
-        <canvas id="renderCanvas" touch-action="none"></canvas>
-        <div class="allCharts">
-            <div class="force">
-                    <div class="ct-chart ct-perfect-fourth"></div>
-            </div>
-            <div class="position"></div>
-            <div class="velocity"></div>
+<canvas id="renderCanvas" touch-action="none"></canvas>
+<div class="allCharts">
+        <div class="force">
+                <canvas class="forceCanvas"></canvas>
         </div>
+        <div class="position">
+                <canvas class="positionCanvas"></canvas>
+        </div>
+        <div class="velocity">
+                <canvas class="velocityCanvas"></canvas>
+        </div>
+</div>
 
 </body>
 
