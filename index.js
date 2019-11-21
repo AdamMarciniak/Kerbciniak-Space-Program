@@ -139,6 +139,8 @@ const physicsRun = (() => {
 
     // Create the scene space
     var scene = new BABYLON.Scene(engine);
+
+ 
     
     var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
     var physicsPlugin = new BABYLON.CannonJSPlugin();
@@ -153,7 +155,7 @@ const physicsRun = (() => {
 
     // Add and manipulate meshes in the scene
     var cone = BABYLON.MeshBuilder.CreateCylinder("cone", {diameterTop: 0, height: 0.3, diameterBottom: 0.2, tessellation: 4}, scene);
-    var ground = BABYLON.MeshBuilder.CreateGround("gd", {width: 20, height: 20, subdivisions: 5}, scene);
+    var ground = BABYLON.MeshBuilder.CreateGround("gd", {width: 100, height: 100, subdivisions: 5}, scene);
     ground.position.y = -1;
 
     cone.physicsImposter = new BABYLON.PhysicsImpostor(cone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 0.098 }, scene);
@@ -169,6 +171,33 @@ const physicsRun = (() => {
     ground.material = blueMaterial;
 
 
+    var particleSystem = new BABYLON.ParticleSystem("particles", 200000, scene);
+    //var particleSystem = new BABYLON.GPUParticleSystem("particles", { capacity:1000000 }, scene);
+    particleSystem.particleTexture = new BABYLON.Texture("flameParticle.png", scene);
+
+    particleSystem.emitter = cone;
+    particleSystem.minEmitBox = new BABYLON.Vector3(0, -1, 0); 
+    particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0);
+
+    particleSystem.color1 = new BABYLON.Color4(1, 1, 0, 1.0);
+    particleSystem.color2 = new BABYLON.Color4(1, 0, 0, 1.0);
+    particleSystem.colorDead = new BABYLON.Color4(0.2, 0, 0, 0.0);
+    particleSystem.minLifeTime = 0.3;
+    particleSystem.maxLifeTime = 2;
+    particleSystem.minSize = 0.03;
+    particleSystem.maxSize = 0.15;
+    particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+    particleSystem.direction1 = new BABYLON.Vector3(-0.9, -2, -0.9);
+    particleSystem.direction2 = new BABYLON.Vector3(0.9, -2, 0.9);
+    particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
+    particleSystem.minAngularSpeed = 0;
+    particleSystem.maxAngularSpeed = Math.PI;
+    particleSystem.minEmitPower = 1;
+    particleSystem.maxEmitPower = 2;
+    particleSystem.updateSpeed = 0.005;
+    particleSystem.addDragGradient(0, -0.2);
+    particleSystem.addDragGradient(1.0, 1);
+    particleSystem.start();
 
   
 
@@ -182,6 +211,8 @@ const physicsRun = (() => {
             var forceMagnitude = slicedRocketData[i] < 1 ? 0 : slicedRocketData[i] ;
             var contactLocalRefPoint = BABYLON.Vector3.Zero();
 
+            particleSystem.emitRate = 1000 * forceMagnitude;
+
             var dragDirection = new BABYLON.Vector3(0, -1, 0);
             var dragMagnitude = CD * rho * (1/2) * cone.physicsImposter.getLinearVelocity().y ** 2;
 
@@ -189,7 +220,7 @@ const physicsRun = (() => {
             cone.physicsImposter.applyForce(forceDirection.scale(forceMagnitude), cone.getAbsolutePosition().add(contactLocalRefPoint));
             cone.physicsImposter.applyForce(dragDirection.scale(dragMagnitude), cone.getAbsolutePosition().add(contactLocalRefPoint));
 
-            console.log(`index = ${i}  Force = ${forceMagnitude} velocity = ${cone.physicsImposter.getLinearVelocity().y}  position = ${cone.getAbsolutePosition().y}`);
+            //console.log(`index = ${i}  Force = ${forceMagnitude} velocity = ${cone.physicsImposter.getLinearVelocity().y}  position = ${cone.getAbsolutePosition().y}`);
 
          
             scene.render();
