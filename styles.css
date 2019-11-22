@@ -7,7 +7,7 @@ body {
 
 #renderCanvas {
     width: 50vw;
-    height: 70vh;
+    height: 90vh;
     touch-action: none;
 }
 
@@ -26,6 +26,18 @@ body {
     margin-bottom: 10px;
     height: 20vh;
     width: 100%;
+}
+
+.launchButton {
+    position: absolute;
+    top: 10px;
+    left: 40px;
+}
+
+.cdWrapper {
+    position: absolute;
+    top: 10px;
+    left: 100px;
 }
 
 

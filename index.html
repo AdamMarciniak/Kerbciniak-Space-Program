@@ -14,9 +14,15 @@
 
 
 <body>
-
+<button class="launchButton">Launch!</button>
+<div class="cdWrapper">
+        <div class="cd">Coefficient Of Drag: </div>
+        <input class="cdInput" type="number" name="quantity" value="0.0006">
+        <button onclick="location.reload();">Restart</button>
+</div>
 <canvas id="renderCanvas" touch-action="none"></canvas>
 <div class="allCharts">
+        <div class="maxHeight">Max Height</div>
         <div class="chartContainer">
                 <canvas class="forceCanvas"></canvas>
         </div>
