@@ -1,2 +1,4 @@
 # Kerbciniak Space Program
- A Javascript Twist on The old Classic
+ A very "raw" Javascript Twist on the beloved rocket launch simulation game.
+ 
+ Demo here: https://adam.teaches.engineering/Kerbciniak-Space-Program/
