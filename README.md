@@ -2,4 +2,4 @@
  A very "raw" Javascript Twist on the beloved rocket launch simulation game.
   ### Demo here: https://adam.teaches.engineering/Kerbciniak-Space-Program/
   
-  ![Interface Image](kerbciniakscreen.jpg)
+  ![Interface Image](kerbciniakscreen.JPG)
